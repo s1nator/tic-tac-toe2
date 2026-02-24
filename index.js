@@ -1,6 +1,7 @@
 const CROSS = 'X';
 const ZERO = 'O';
 const EMPTY = ' ';
+let counter = 0;
 let winner = false;
 let field = [
     [EMPTY, EMPTY, EMPTY],
@@ -37,6 +38,7 @@ function cellClickHandler (row, col) {
 
     console.log(`Clicked on cell: ${row}, ${col}`);
     if (field[row][col] === EMPTY){
+        counter++;
         if (player == true){
             field[row][col] = CROSS;
             renderSymbolInCell(CROSS, row, col);
@@ -50,9 +52,81 @@ function cellClickHandler (row, col) {
     }
 }
 
-function  winnerGame() {
+function resetClickHandler () {
 
+    field = [
+        [EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY]
+    ];
+    player = true;
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
 
+            renderSymbolInCell(field[i][j], i, j);
+        }
+    }
+
+function winnerGame() {
+    const winningScenarios = [
+
+        [
+            [CROSS, CROSS, CROSS],
+            [EMPTY, EMPTY, EMPTY],
+            [EMPTY, EMPTY, EMPTY]
+        ],
+        [
+            [EMPTY, EMPTY, EMPTY],
+            [CROSS, CROSS, CROSS],
+            [EMPTY, EMPTY, EMPTY]
+        ],
+
+        [
+            [EMPTY, EMPTY, EMPTY],
+            [EMPTY, EMPTY, EMPTY],
+            [CROSS, CROSS, CROSS]
+        ],
+
+        [
+            [CROSS, EMPTY, EMPTY],
+            [CROSS, EMPTY, EMPTY],
+            [CROSS, EMPTY, EMPTY]
+        ],
+        [
+            [EMPTY, CROSS, EMPTY],
+            [EMPTY, CROSS, EMPTY],
+            [EMPTY, CROSS, EMPTY]
+        ],
+        [
+            [EMPTY, EMPTY, CROSS],
+            [EMPTY, EMPTY, CROSS],
+            [EMPTY, EMPTY, CROSS]
+        ],
+
+        [
+            [CROSS, EMPTY, EMPTY],
+            [EMPTY, CROSS, EMPTY],
+            [EMPTY, EMPTY, CROSS]
+        ],
+        [
+            [EMPTY, EMPTY, CROSS],
+            [EMPTY, CROSS, EMPTY],
+            [CROSS, EMPTY, EMPTY]
+        ]
+    ];
+    for (let i of winningScenarios) {
+        if (field == i){
+            alert("Победил");
+        }
+        return;
+        }
+    }
+}
+
+function drawPlayer() {
+    if (counter == 9 && winner == false) {
+        alert("Победила дружба");
+    }
 }
 
 function renderSymbolInCell (symbol, row, col, color = '#333') {
