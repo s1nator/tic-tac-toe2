@@ -8,6 +8,7 @@ let field = [
     [EMPTY, EMPTY, EMPTY],
     [EMPTY, EMPTY, EMPTY]
 ];
+
 let player = true;
 
 const container = document.getElementById('fieldWrapper');
@@ -39,15 +40,30 @@ function cellClickHandler (row, col) {
     console.log(`Clicked on cell: ${row}, ${col}`);
     if (field[row][col] === EMPTY){
         counter++;
+        let currentSymbol;
         if (player == true){
             field[row][col] = CROSS;
             renderSymbolInCell(CROSS, row, col);
+            currentSymbol = CROSS;
             player = false;
         }
         else{
             field[row][col] = ZERO;
             renderSymbolInCell(ZERO, row, col);
+            currentSymbol = ZERO;
             player = true;
+        }
+
+        if (winnerGame()){
+            if (currentSymbol === CROSS){
+                alert("Победили крестики");
+            }
+            else {
+                alert("Победили нолики");
+            }
+        }
+        else {
+            drawPlayer();
         }
     }
 }
@@ -60,67 +76,57 @@ function resetClickHandler () {
         [EMPTY, EMPTY, EMPTY]
     ];
     player = true;
+    counter = 0;
     for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
-
             renderSymbolInCell(field[i][j], i, j);
         }
     }
+}
 
 function winnerGame() {
-    const winningScenarios = [
-
-        [
-            [CROSS, CROSS, CROSS],
-            [EMPTY, EMPTY, EMPTY],
-            [EMPTY, EMPTY, EMPTY]
-        ],
-        [
-            [EMPTY, EMPTY, EMPTY],
-            [CROSS, CROSS, CROSS],
-            [EMPTY, EMPTY, EMPTY]
-        ],
-
-        [
-            [EMPTY, EMPTY, EMPTY],
-            [EMPTY, EMPTY, EMPTY],
-            [CROSS, CROSS, CROSS]
-        ],
-
-        [
-            [CROSS, EMPTY, EMPTY],
-            [CROSS, EMPTY, EMPTY],
-            [CROSS, EMPTY, EMPTY]
-        ],
-        [
-            [EMPTY, CROSS, EMPTY],
-            [EMPTY, CROSS, EMPTY],
-            [EMPTY, CROSS, EMPTY]
-        ],
-        [
-            [EMPTY, EMPTY, CROSS],
-            [EMPTY, EMPTY, CROSS],
-            [EMPTY, EMPTY, CROSS]
-        ],
-
-        [
-            [CROSS, EMPTY, EMPTY],
-            [EMPTY, CROSS, EMPTY],
-            [EMPTY, EMPTY, CROSS]
-        ],
-        [
-            [EMPTY, EMPTY, CROSS],
-            [EMPTY, CROSS, EMPTY],
-            [CROSS, EMPTY, EMPTY]
-        ]
-    ];
-    for (let i of winningScenarios) {
-        if (field == i){
-            alert("Победил");
-        }
-        return;
+    // Проверка строк
+    for (let i = 0; i < 3; i++) {
+        if (field[i][0] !== EMPTY && 
+            field[i][0] === field[i][1] && 
+            field[i][1] === field[i][2]) {
+            renderSymbolInCell(field[i][0], i, 0, 'red');
+            renderSymbolInCell(field[i][1], i, 1, 'red');
+            renderSymbolInCell(field[i][2], i, 2, 'red');
+            return true;
         }
     }
+    
+    for (let j = 0; j < 3; j++) {
+        if (field[0][j] !== EMPTY && 
+            field[0][j] === field[1][j] && 
+            field[1][j] === field[2][j]) {
+            renderSymbolInCell(field[0][j], 0, j, 'red');
+            renderSymbolInCell(field[1][j], 1, j, 'red');
+            renderSymbolInCell(field[2][j], 2, j, 'red');
+            return true;
+        }
+    }
+    
+    if (field[0][0] !== EMPTY && 
+        field[0][0] === field[1][1] && 
+        field[1][1] === field[2][2]) {
+        renderSymbolInCell(field[0][0], 0, 0, 'red');
+        renderSymbolInCell(field[1][1], 1, 1, 'red');
+        renderSymbolInCell(field[2][2], 2, 2, 'red');
+        return true;
+    }
+    
+    if (field[0][2] !== EMPTY && 
+        field[0][2] === field[1][1] && 
+        field[1][1] === field[2][0]) {
+        renderSymbolInCell(field[0][2], 0, 2, 'red');
+        renderSymbolInCell(field[1][1], 1, 1, 'red');
+        renderSymbolInCell(field[2][0], 2, 0, 'red');
+        return true;
+    }
+    
+    return false;
 }
 
 function drawPlayer() {
@@ -144,10 +150,6 @@ function findCell (row, col) {
 function addResetListener () {
     const resetButton = document.getElementById('reset');
     resetButton.addEventListener('click', resetClickHandler);
-}
-
-function resetClickHandler () {
-    console.log('reset!');
 }
 
 
