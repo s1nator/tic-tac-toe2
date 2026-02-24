@@ -1,6 +1,7 @@
 const CROSS = 'X';
 const ZERO = 'O';
 const EMPTY = ' ';
+let winner = false;
 let field = [
     [EMPTY, EMPTY, EMPTY],
     [EMPTY, EMPTY, EMPTY],
@@ -47,6 +48,11 @@ function cellClickHandler (row, col) {
             player = true;
         }
     }
+}
+
+function  winnerGame() {
+
+
 }
 
 function renderSymbolInCell (symbol, row, col, color = '#333') {
